@@ -35,10 +35,16 @@ The AK4 producer creates ntuples which can be used for
 
 ### Example
 
-To create an example ntuple from a QCD datasets, make sure you have a valid grid proxy and run the following:
+To create an example ntuple from a QCD datasets, make sure you have a valid grid proxy and
 
+1. If you have [this PR merged](https://github.com/cms-sw/cmssw/pull/40438) in your CMSSW environment you can run
 ```
-cmsRun Run3ScoutingJetTagging/Analysis/test/AK4Producer.py inputDataset="/QCD_"
+cmsRun Run3ScoutingJetTagging/Analysis/test/AK4FromNanoAOD.py inputDataset="/QCD_"
+```
+
+2. Else run
+```
+cmsRun Run3ScoutingJetTagging/Analysis/test/AK4.py inputDataset="/QCD_"
 ```
 
 ### Derivation of labels
@@ -75,10 +81,16 @@ The AK8 producer creates ntuples which can be used for
 
 ### Examples
 
-To create an example ntuple from a QCD dataset, make sure you have a valid grid proxy and run the following:
+To create an example ntuple from a QCD datasets, make sure you have a valid grid proxy and
 
+1. If you have [this PR merged](https://github.com/cms-sw/cmssw/pull/40438) in your CMSSW environment you can run
 ```
-cmsRun Run3ScoutingJetTagging/Analysis/test/AK8Producer.py inputDataset="/QCD_"
+cmsRun Run3ScoutingJetTagging/Analysis/test/AK8FromNanoAOD.py inputDataset="/QCD_"
+```
+
+2. Else run
+```
+cmsRun Run3ScoutingJetTagging/Analysis/test/AK8.py inputDataset="/QCD_"
 ```
 
 ### Derivation of labels for flavour tagging
