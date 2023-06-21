@@ -137,9 +137,9 @@ private:
 };
 
 AK8JetNtupleProducer::AK8JetNtupleProducer(const edm::ParameterSet& iConfig):
-  pfcand_token_(consumes<std::vector<Run3ScoutingParticle> > (iConfig.getParameter<edm::InputTag>("pfcandsParticleNet"))),
-  gencand_token_(consumes<reco::GenParticleCollection> (iConfig.getParameter<edm::InputTag>("genpart"))),
-  genjet_token_(consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("ak8genjet"))),
+  pfcand_token_(consumes<std::vector<Run3ScoutingParticle> > (iConfig.getParameter<edm::InputTag>("pf_candidates"))),
+  gencand_token_(consumes<reco::GenParticleCollection> (iConfig.getParameter<edm::InputTag>("gen_candidates"))),
+  genjet_token_(consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("gen_jets"))),
   particletable_token_(esConsumes<HepPDT::ParticleDataTable, edm::DefaultRecord>())
 {
 

@@ -107,8 +107,8 @@ private:
 };
 
 AK4JetNtupleProducer::AK4JetNtupleProducer(const edm::ParameterSet& iConfig):
-  pfcand_token_(consumes<std::vector<Run3ScoutingParticle> > (iConfig.getParameter<edm::InputTag>("pf_candidates"))),
-  genjet_token_(consumes<reco::JetFlavourInfoMatchingCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
+  pfcand_token_(consumes<std::vector<Run3ScoutingParticle>>(iConfig.getParameter<edm::InputTag>("pf_candidates"))),
+  genjet_token_(consumes<reco::JetFlavourInfoMatchingCollection>(iConfig.getParameter<edm::InputTag>("gen_jets"))),
   particletable_token_(esConsumes<HepPDT::ParticleDataTable, edm::DefaultRecord>())
 {
 

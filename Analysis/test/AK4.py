@@ -35,52 +35,18 @@ process.TFileService = cms.Service("TFileService",
 )
 
 
-# Create scouting jets
-process.scoutingPFCands = scoutingPFCands.clone(CHS=cms.bool(True))
-process.ak8JetTask = cms.Task(process.ak8ScoutingJets,process.ak8ScoutingJetsSoftDrop,process.ak8ScoutingJetsSoftDropMass,process.ak8ScoutingJetEcfNbeta1)
-
 # Create SoftDrop pruned GEN jets
-from RecoJets.JetProducers.ak8GenJets_cfi import ak8GenJets
-process.ak8GenJetsWithNu = ak8GenJets.clone(
-    src='packedGenParticles',
-    rParam=cms.double(0.8),
-    jetPtMin=100.0
-)
-
-process.ak8GenJetsWithNuSoftDrop = process.ak8GenJetsWithNu.clone(
-    useSoftDrop=cms.bool(True),
-    zcut=cms.double(0.1),
-    beta=cms.double(0.0),
-    R0=cms.double(0.8),
-    useExplicitGhosts=cms.bool(True)
-)
-
+process.load('PhysicsTools.NanoAOD.jetMC_cff')
 process.genJetSequence = cms.Sequence(
-    process.ak8GenJetsWithNu+
-    process.ak8GenJetsWithNuSoftDrop
+   process.patJetPartonsNano+
+   process.genJetFlavourAssociation
 )
 
 # Create ParticleNet ntuple
-process.tree = cms.EDAnalyzer("AK8JetNtupleProducer",
+process.tree = cms.EDAnalyzer("AK4JetNtupleProducer",
       isQCD = cms.untracked.bool( '/QCD_' in params.inputDataset ),
-      gen_jets = cms.InputTag( "ak8GenJetsWithNuSoftDrop" ),
-      gen_candidates = cms.InputTag( "prunedGenParticles" ),
-      pf_candidates = cms.InputTag( "scoutingPFCands" ),
-      jets = cms.InputTag( "ak8ScoutingJets" ),
-      normchi2_value_map = cms.InputTag("scoutingPFCands", "normchi2"),
-      dz_value_map = cms.InputTag("scoutingPFCands", "dz"),
-      dxy_value_map = cms.InputTag("scoutingPFCands", "dxy"),
-      dzsig_value_map = cms.InputTag("scoutingPFCands", "dzsig"),
-      dxysig_value_map = cms.InputTag("scoutingPFCands", "dxysig"),
-      lostInnerHits_value_map = cms.InputTag("scoutingPFCands", "lostInnerHits"),
-      quality_value_map = cms.InputTag("scoutingPFCands", "quality"),
-      trkPt_value_map = cms.InputTag("scoutingPFCands", "trkPt"),
-      trkEta_value_map = cms.InputTag("scoutingPFCands", "trkEta"),
-      trkPhi_value_map = cms.InputTag("scoutingPFCands", "trkPhi"),
-      msd_value_map = cms.InputTag("ak8ScoutingJetsSoftDropMass"),
-      n2b1_value_map = cms.InputTag("ak8ScoutingJetEcfNbeta1:ecfN2"),
+      gen_jets = cms.InputTag( "genJetFlavourAssociation" ),
+      pf_candidates = cms.InputTag( "hltScoutingPFPacker" ),
 )
 
-process.nanoSequenceScouting = cms.Sequence(cms.Task(process.scoutingPFCands,process.ak8JetTask))
-
-process.p = cms.Path(process.nanoSequenceScouting*process.genJetSequence*process.tree)
+process.p = cms.Path(process.genJetSequence*process.tree)
