@@ -1,15 +1,20 @@
-_This repository creates jet-level Run 3 scouting ntuples for training mass regression with ParticleNet. It was originally created for the "Jet tagging using the Run3 Scouting data" hackathon on November 8-11 2021 and then updated._
+# Contents of this repository
 
-# Download, compile and run code
+1. [Getting started: How to download and compile the code](#getting-started)
+2. [Ntuples: How to produce ntuples](#produce-ntuples)
+3. [Training: How to run the training on CPU and GPU](#training)
+4. Evaluation: How to evaluate the training (TODO)
 
-The code was develop in `CMSSW_12_3_0`.
+# Getting started
+
+The code was develop in `CMSSW_13_1_0_pre1` but newer releases should also work
 
 1. Log into lxplus
 2. Prepare the CMSSW release
 
 ```
-cmsrel CMSSW_12_3_0
-cd CMSSW_12_3_0/src
+cmsrel CMSSW_13_1_0_pre1
+cd CMSSW_13_1_0_pre1/src
 cmsenv
 ```
 
@@ -121,3 +126,13 @@ The jet labels are assigned to each scouting jet as follows:
 3. For each jet, match a GEN jet by requiring dR < 0.8
 4. Assign `fj_genjet_mass` to the value of the matched GEN jet
 5. If there is no match, assign `fj_genjet_mass` to -99
+
+# Training
+
+The training is performed using [Weaver](https://github.com/hqucms/weaver-core/). Follow [these instructions](https://github.com/hqucms/weaver-core/#set-up-your-environment) in order to set up the correct environment. The linked repository contains basic information about the configuration files needed to perform the training. More indepth information about ParticleNet can be found over at [CMS Machine Learning Documetation](https://cms-ml.github.io/documentation/inference/particlenet.html).
+
+The [Training](Training) folder contains the configuration files for training
+
+1. AK8 mass regression
+2. AK8 flavour tagging [TODO]
+3. AK4 flavour tagging [TODO]
