@@ -1,7 +1,7 @@
 # Contents of this repository
 
 1. [Getting started: How to download and compile the code](#getting-started)
-2. [Ntuples: How to produce ntuples](#produce-ntuples)
+2. [Ntuples: How to produce training samples](#produce-ntuples)
 3. [Training: How to run the training on CPU and GPU](#training)
 4. Evaluation: How to evaluate the training (TODO)
 
@@ -131,8 +131,21 @@ The jet labels are assigned to each scouting jet as follows:
 
 The training is performed using [Weaver](https://github.com/hqucms/weaver-core/). Follow [these instructions](https://github.com/hqucms/weaver-core/#set-up-your-environment) in order to set up the correct environment. The linked repository contains basic information about the configuration files needed to perform the training. More indepth information about ParticleNet can be found over at [CMS Machine Learning Documetation](https://cms-ml.github.io/documentation/inference/particlenet.html).
 
-The [Training](Training) folder contains the configuration files for training
+Two types of configuration files are needed by Weaver:
 
-1. AK8 mass regression
-2. AK8 flavour tagging [TODO]
-3. AK4 flavour tagging [TODO]
+1. A data configuration YAML file, which describe how to process the input data
+3. A network configuration python file, which defines the network architecture we are using for our model
+
+The [Training](Training) folder contains the configuration files for
+
+1. [AK4 flavour tagging](Training/AK4/flavour)
+2. [AK8 flavour tagging](Training/AK8/flavour)
+3. [AK8 mass regression](Training/AK8/massreg)
+
+Each training type contains two folders called `data` and `ǹetwork. These hosts the data and network configuration files respectively. The network for AK4 and AK8 flavour tagging are the same, however the mass regression network differs in a few aspects. For flavour tagging, [the last unit of the network is the soft-max function](https://github.com/alintulu/Run3ScoutingJetTagging/blob/main/Training/AK8/flavour/network/flavour.py#L30C9-L30C37), which normalises the output and obtains a joint probability distribution for the output classes
+
+```
+'output_names': ['softmax'],
+```
+
+While for mass regression, [the soft-max unit is removed](https://github.com/alintulu/Run3ScoutingJetTagging/blob/main/Training/AK8/massreg/network/massreg.py#L31) which allows the output to be a single real number.
