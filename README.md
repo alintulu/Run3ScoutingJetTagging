@@ -3,7 +3,7 @@
 1. [Getting started: How to download and compile the code](#getting-started)
 2. [Ntuples: How to produce training samples](#produce-ntuples)
 3. [Training: How to run the training on CPU and GPU](#training)
-4. Evaluation: How to evaluate the training (TODO)
+4. [Evaluation: How to evaluate the training](#evaluation)
 
 # Getting started
 
@@ -182,3 +182,11 @@ Each training type contains two folders called `data` and `ǹetwork. These hosts
 ```
 
 While for mass regression, [the soft-max unit is removed](https://github.com/alintulu/Run3ScoutingJetTagging/blob/main/Training/AK8/massreg/network/massreg.py#L31) which allows the output to be a single real number.
+
+The training is performed by running the `train_cpu.sh` and `train_gpu.sh` files. Set the desired batch size, number of epochs etc before starting the training.
+
+# Evaluation
+
+The output folder stores the trained PyTorch models after every epoch, as well as the log file that records the loss and accuracy in the runtime. The predict step also produces a predicted root file in the output folder, including the truth label, the predicted store, and several observer variables we provided in the data card. With the predicted root file, you can evaluate the performance of your training. 
+
+The [Evaluation](Evaluation) folder contains notebooks to create a ROC curves for AK4 and AK8 flavour tagging as well several plots to determine the performance of the mass regression.
