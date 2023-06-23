@@ -38,6 +38,23 @@ The AK4 producer creates ntuples which can be used for
 - uds tagging
 - g tagging
 
+### Input samples
+
+AK4 flavour tagging is usually trained on three types of input samples:
+
+1. BulkGravitonToHH
+
+An example dataset is:
+
+```
+/BulkGravitonToHH_MX960_MH121_TuneCP5_13p6TeV_madgraph-pythia8/Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v4/AODSIM
+```
+
+Here the generated mass of the BulkGraviton is 960 GeV, while the generated mass for the Higgs boson is 121 GeV. In order to avoid mass sculpting (which happens when the model learns to distinguish signal from background by looking at the mass of the particle), we use several different datasets with different generated masses for both particles.
+
+2. QCD
+3. TTbar
+
 ### Example
 
 To create an example ntuple from a QCD datasets, make sure you have a valid grid proxy and
@@ -83,6 +100,22 @@ The AK8 producer creates ntuples which can be used for
 - Higgs to udsuds vs QCD tagging
 - Higgs to tautau vs QCD tagging
 - Mass regression
+
+### Input samples
+
+AK8 flavour tagging and mass regression is usually trained on two types of input samples:
+
+1. BulkGravitonToHH
+
+An example dataset is:
+
+```
+/BulkGravitonToHH_MX960_MH121_TuneCP5_13p6TeV_madgraph-pythia8/Run3Summer22EEDRPremix-124X_mcRun3_2022_realistic_postEE_v1-v4/AODSIM
+```
+
+Here the generated mass of the BulkGraviton is 960 GeV, while the generated mass for the Higgs boson is 121 GeV. In order to avoid mass sculpting (which happens when the model learns to distinguish signal from background by looking at the mass of the particle), we use several different datasets with different generated masses for both particles.
+
+2. QCD
 
 ### Examples
 
