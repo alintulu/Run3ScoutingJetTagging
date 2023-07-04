@@ -175,7 +175,7 @@ The [Training](Training) folder contains the configuration files for
 2. [AK8 flavour tagging](Training/AK8/flavour)
 3. [AK8 mass regression](Training/AK8/massreg)
 
-Each training type contains two folders called `data` and `ǹetwork. These hosts the data and network configuration files respectively. The network for AK4 and AK8 flavour tagging are the same, however the mass regression network differs in a few aspects. For flavour tagging, [the last unit of the network is the soft-max function](https://github.com/alintulu/Run3ScoutingJetTagging/blob/main/Training/AK8/flavour/network/flavour.py#L30C9-L30C37), which normalises the output and obtains a joint probability distribution for the output classes
+Each training type contains two folders called `data` and `network`. These hosts the data and network configuration files respectively. The network for AK4 and AK8 flavour tagging are the same, however the mass regression network differs in a few aspects. For flavour tagging, [the last unit of the network is the soft-max function](https://github.com/alintulu/Run3ScoutingJetTagging/blob/main/Training/AK8/flavour/network/flavour.py#L30C9-L30C37), which normalises the output and obtains a joint probability distribution for the output classes
 
 ```
 'output_names': ['softmax'],
@@ -187,6 +187,6 @@ The training is performed by running the `train_cpu.sh` and `train_gpu.sh` files
 
 # Evaluation
 
-The output folder stores the trained PyTorch models after every epoch, as well as the log file that records the loss and accuracy in the runtime. The predict step also produces a predicted root file in the output folder, including the truth label, the predicted store, and several observer variables we provided in the data card. With the predicted root file, you can evaluate the performance of your training. 
+The output folder stores the trained PyTorch models after every epoch, as well as the log file that records the loss and accuracy in the runtime. The predict step also produces a predicted root file in the output folder, including the truth label, the predicted store, and several observer variables we provided in the data configuration file. With the predicted root file, you can evaluate the performance of your training. 
 
 The [Evaluation](Evaluation) folder contains notebooks to create a ROC curves for AK4 and AK8 flavour tagging as well several plots to determine the performance of the mass regression.
