@@ -13,7 +13,7 @@ test_time_selection:
 new_variables:
    ### [format] name: formula
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
-   pfcand_mask: awkward.JaggedArray.ones_like(pfcand_etarel)
+   pfcand_mask: ak.ones_like(pfcand_etarel)
    label_b:     (fj_nb==1)
    label_bb:    (fj_nb>1)
    label_c:     (fj_nb==0) & (fj_nc==1)

@@ -2,7 +2,7 @@
 
 1. [Getting started: How to download and compile the code](#getting-started)
 2. [Ntuples: How to produce training samples](#produce-ntuples)
-3. [Training: How to run the training on CPU and GPU](#training)
+3. [Training: How to run the training on GPU](#training)
 4. [Evaluation: How to evaluate the training](#evaluation)
 
 # Getting started
@@ -183,7 +183,7 @@ Each training type contains two folders called `data` and `network`. These hosts
 
 While for mass regression, [the soft-max unit is removed](https://github.com/alintulu/Run3ScoutingJetTagging/blob/main/Training/AK8/massreg/network/massreg.py#L31) which allows the output to be a single real number.
 
-The training is performed by running the `train_cpu.sh` and `train_gpu.sh` files. Set the desired batch size, number of epochs etc before starting the training.
+The training is performed by running the `train.sh` file. Set the desired batch size, number of epochs etc before starting the training.
 
 # Evaluation
 
