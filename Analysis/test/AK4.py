@@ -14,7 +14,6 @@ params.register('inputDataset',
 process = cms.Process("LL")
 params.parseArguments()
 
-process.load("PhysicsTools.NanoAOD.run3scouting_cff")
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
