@@ -21,6 +21,7 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/JetReco/interface/GenJet.h"
 #include "DataFormats/JetReco/interface/GenJetCollection.h"
+#include "DataFormats/Math/interface/libminifloat.h"
 
 #include "Run3ScoutingAnalysisTools/Analysis/interface/FatJetMatching.h"
 
@@ -48,8 +49,6 @@ private:
   virtual void clearVars();
   virtual void genJetMatching(edm::View<reco::Jet>, const reco::GenJetCollection&);
  
-  edm::Service<TFileService> fs;
-
   edm::EDGetTokenT<edm::View<reco::Jet>> jet_token_;
   edm::EDGetTokenT<CandidateView> pfcand_token_;
   edm::EDGetTokenT<reco::GenParticleCollection> gencand_token_;
@@ -85,6 +84,7 @@ private:
   edm::Handle<edm::ValueMap<float>> n2b1_value_map_;
   
   bool isQCD_ = false;
+  int mantissa_prescission_ = 10;
 
 private:
   TTree* tree;
@@ -100,7 +100,6 @@ private:
   std::vector<Float16_t> pfcand_ptrel_log;
   std::vector<Float16_t> pfcand_abseta;
   std::vector<Float16_t> pfcand_deltaR;
-  std::vector<Float16_t> pfcand_mask;
   std::vector<Float16_t> pfcand_charge;
   std::vector<Float16_t> pfcand_isEl;
   std::vector<Float16_t> pfcand_isMu;
@@ -220,6 +219,8 @@ AK8JetFromNanoAODNtupleProducer::AK8JetFromNanoAODNtupleProducer(const edm::Para
 
   usesResource("TFileService");
   edm::Service<TFileService> fs;
+  fs->file().SetCompressionAlgorithm(ROOT::kLZMA);
+  fs->file().SetCompressionLevel(9);
 
   tree = fs->make<TTree>("Events", "Events");
 
@@ -234,7 +235,6 @@ AK8JetFromNanoAODNtupleProducer::AK8JetFromNanoAODNtupleProducer(const edm::Para
   tree->Branch("pfcand_ptrel_log", &pfcand_ptrel_log);
   tree->Branch("pfcand_abseta", &pfcand_abseta);
   tree->Branch("pfcand_deltaR", &pfcand_deltaR);
-  tree->Branch("pfcand_mask", &pfcand_mask);
   tree->Branch("pfcand_charge", &pfcand_charge);
   tree->Branch("pfcand_isEl", &pfcand_isEl);
   tree->Branch("pfcand_isMu", &pfcand_isMu);
@@ -354,12 +354,12 @@ void AK8JetFromNanoAODNtupleProducer::analyze(const edm::Event &iEvent, const ed
     }
 
     event_no = iEvent.id().event();
-    fj_pt = jet.pt();
-    fj_eta = jet.eta();
-    fj_phi = jet.phi();
-    fj_mass = jet.mass();
-    fj_msd = (*msd_value_map_)[jets->ptrAt(jet_n)];
-    fj_n2b1 = (*n2b1_value_map_)[jets->ptrAt(jet_n)];
+    fj_pt = MiniFloatConverter::reduceMantissaToNbitsRounding(jet.pt(), mantissa_prescission_);
+    fj_eta = MiniFloatConverter::reduceMantissaToNbitsRounding(jet.eta(), mantissa_prescission_);
+    fj_phi = MiniFloatConverter::reduceMantissaToNbitsRounding(jet.phi(), mantissa_prescission_);
+    fj_mass = MiniFloatConverter::reduceMantissaToNbitsRounding(jet.mass(), mantissa_prescission_);
+    fj_msd = MiniFloatConverter::reduceMantissaToNbitsRounding((*msd_value_map_)[jets->ptrAt(jet_n)], mantissa_prescission_);
+    fj_n2b1 = MiniFloatConverter::reduceMantissaToNbitsRounding((*n2b1_value_map_)[jets->ptrAt(jet_n)], mantissa_prescission_);
     fj_no = jets->size();
     fj_npfcands = jet.numberOfDaughters();
 
@@ -386,47 +386,46 @@ void AK8JetFromNanoAODNtupleProducer::analyze(const edm::Event &iEvent, const ed
        pfcand_isChargedHad.push_back(std::abs(reco_cand->pdgId()) == 211);
        pfcand_isGamma.push_back(std::abs(reco_cand->pdgId()) == 22);
        pfcand_isNeutralHad.push_back(std::abs(reco_cand->pdgId()) == 130);
-       pfcand_phirel.push_back(reco::deltaPhi(candP4, jet));
-       pfcand_etarel.push_back(etasign * (candP4.eta() - jet.eta()));
-       pfcand_deltaR.push_back(reco::deltaR(candP4, jet));
-       pfcand_abseta.push_back(std::abs(candP4.eta()));
-       pfcand_ptrel_log.push_back(std::log(candP4.pt() / jet.pt()));
-       pfcand_ptrel.push_back(candP4.pt() / jet.pt());
-       pfcand_erel_log.push_back(std::log(candP4.energy() / jet.energy()));
-       pfcand_erel.push_back(candP4.energy() / jet.energy());
-       pfcand_pt_log.push_back(std::log(candP4.pt()));
-       pfcand_mask.push_back(1);
-       pfcand_pt_log_nopuppi.push_back(std::log(cand->pt()));
-       pfcand_e_log_nopuppi.push_back(std::log(cand->energy()));
+       pfcand_phirel.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(reco::deltaPhi(candP4, jet), mantissa_prescission_));
+       pfcand_etarel.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(etasign * (candP4.eta() - jet.eta()), mantissa_prescission_));
+       pfcand_deltaR.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(reco::deltaR(candP4, jet), mantissa_prescission_));
+       pfcand_abseta.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(std::abs(candP4.eta()), mantissa_prescission_));
+       pfcand_ptrel_log.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(std::log(candP4.pt() / jet.pt()), mantissa_prescission_));
+       pfcand_ptrel.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(candP4.pt() / jet.pt(), mantissa_prescission_));
+       pfcand_erel_log.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(std::log(candP4.energy() / jet.energy()), mantissa_prescission_));
+       pfcand_erel.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(candP4.energy() / jet.energy(), mantissa_prescission_));
+       pfcand_pt_log.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(std::log(candP4.pt()), mantissa_prescission_));
+       pfcand_pt_log_nopuppi.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(std::log(cand->pt()), mantissa_prescission_));
+       pfcand_e_log_nopuppi.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(std::log(cand->energy()), mantissa_prescission_));
 
        if ((*normchi2_value_map_)[cand] > 900) {
-          pfcand_normchi2.push_back(0);
-          pfcand_lostInnerHits.push_back(0);
-          pfcand_quality.push_back(0);
-          pfcand_dz.push_back(0);
-          pfcand_dzsig.push_back(0);
-          pfcand_dxy.push_back(0);
-          pfcand_dxysig.push_back(0);
-          pfcand_btagEtaRel.push_back(0);
-          pfcand_btagPtRatio.push_back(0);
-          pfcand_btagPParRatio.push_back(0);
+          pfcand_normchi2.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(0, mantissa_prescission_));
+          pfcand_lostInnerHits.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(0, mantissa_prescission_));
+          pfcand_quality.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(0, mantissa_prescission_));
+          pfcand_dz.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(0, mantissa_prescission_));
+          pfcand_dzsig.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(0, mantissa_prescission_));
+          pfcand_dxy.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(0, mantissa_prescission_));
+          pfcand_dxysig.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(0, mantissa_prescission_));
+          pfcand_btagEtaRel.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(0, mantissa_prescission_));
+          pfcand_btagPtRatio.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(0, mantissa_prescission_));
+          pfcand_btagPParRatio.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(0, mantissa_prescission_));
       } else {
-          pfcand_normchi2.push_back((*normchi2_value_map_)[cand]);
-          pfcand_lostInnerHits.push_back((*lostInnerHits_value_map_)[cand]);
-          pfcand_quality.push_back((*quality_value_map_)[cand]);
-          pfcand_dz.push_back((*dz_value_map_)[cand]);
-          pfcand_dzsig.push_back((*dzsig_value_map_)[cand]);
-          pfcand_dxy.push_back((*dxy_value_map_)[cand]);
-          pfcand_dxysig.push_back((*dxysig_value_map_)[cand]);
+          pfcand_normchi2.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding((*normchi2_value_map_)[cand], mantissa_prescission_));
+          pfcand_lostInnerHits.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding((*lostInnerHits_value_map_)[cand], mantissa_prescission_));
+          pfcand_quality.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding((*quality_value_map_)[cand], mantissa_prescission_));
+          pfcand_dz.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding((*dz_value_map_)[cand], mantissa_prescission_));
+          pfcand_dzsig.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding((*dzsig_value_map_)[cand], mantissa_prescission_));
+          pfcand_dxy.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding((*dxy_value_map_)[cand], mantissa_prescission_));
+          pfcand_dxysig.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding((*dxysig_value_map_)[cand], mantissa_prescission_));
           float trk_px = (*trkPt_value_map_)[cand] * std::cos((*trkPhi_value_map_)[cand]);
           float trk_py = (*trkPt_value_map_)[cand] * std::sin((*trkPhi_value_map_)[cand]);
           float trk_pz = (*trkPt_value_map_)[cand] * std::sinh((*trkEta_value_map_)[cand]);
           math::XYZVector track_mom(trk_px, trk_py, trk_pz);
           TVector3 track_direction(trk_px, trk_py, trk_pz);
           double track_mag = sqrt(trk_px * trk_px + trk_py * trk_py + trk_pz * trk_pz);
-          pfcand_btagEtaRel.push_back(reco::btau::etaRel(jet_dir, track_mom));
-          pfcand_btagPtRatio.push_back(track_direction.Perp(jet_direction) / track_mag);
-          pfcand_btagPParRatio.push_back(jet_dir.Dot(track_mom) / track_mag);
+          pfcand_btagEtaRel.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(reco::btau::etaRel(jet_dir, track_mom), mantissa_prescission_));
+          pfcand_btagPtRatio.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(track_direction.Perp(jet_direction) / track_mag, mantissa_prescission_));
+          pfcand_btagPParRatio.push_back(MiniFloatConverter::reduceMantissaToNbitsRounding(jet_dir.Dot(track_mom) / track_mag, mantissa_prescission_));
       }
     }
     tree->Fill();
@@ -436,10 +435,16 @@ void AK8JetFromNanoAODNtupleProducer::analyze(const edm::Event &iEvent, const ed
 
 void AK8JetFromNanoAODNtupleProducer::clearVars(){
   pfcand_pt_log_nopuppi.clear();
+  pfcand_pt_log.clear();
+  pfcand_ptrel.clear();
+  pfcand_ptrel_log.clear();
   pfcand_e_log_nopuppi.clear();
   pfcand_etarel.clear();
+  pfcand_erel.clear();
+  pfcand_erel_log.clear();
   pfcand_phirel.clear();
   pfcand_abseta.clear();
+  pfcand_deltaR.clear();
   pfcand_charge.clear();
   pfcand_isEl.clear();
   pfcand_isMu.clear();

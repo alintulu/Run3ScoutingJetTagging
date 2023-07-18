@@ -147,6 +147,8 @@ AK8JetNtupleProducer::AK8JetNtupleProducer(const edm::ParameterSet& iConfig):
 
   usesResource("TFileService");
   edm::Service<TFileService> fs;
+  fs->file().SetCompressionAlgorithm(ROOT::kLZMA);
+  fs->file().SetCompressionLevel(9);
 
   tree = fs->make<TTree>("Events", "Events");
 
