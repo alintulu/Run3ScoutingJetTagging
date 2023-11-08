@@ -4,7 +4,6 @@ import os, sys
 import subprocess
 import json
 import uproot
-from coffea.nanoevents import NanoEventsFactory, ScoutingNanoAODSchema
 from coffea.lookup_tools.lookup_base import lookup_base
 import numpy as np
 from coffea import processor, util
@@ -27,6 +26,7 @@ class CalibrationProcessor(processor.ProcessorABC):
     def accumulator(self):
         return {
             "sumw": defaultdict(float),
+            "events": defaultdict(int),
             "cutflow": (
                             Hist.new.IntCategory(
                                 [], name="cat", label="Category", growth=True
@@ -55,6 +55,7 @@ class CalibrationProcessor(processor.ProcessorABC):
 
         output = self.accumulator
         dataset = events.metadata['dataset']
+        output["events"][dataset] += len(events)
         
         selection = PackedSelection()
         weights = Weights(len(events), storeIndividual=True)

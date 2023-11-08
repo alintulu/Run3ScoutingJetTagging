@@ -1,11 +1,12 @@
 # Contents of this repository
 
-1. [Getting started: How to download and compile the code](#getting-started)
-2. [Ntuples: How to produce training samples](#produce-ntuples)
-3. [Training: How to run the training on GPU](#training)
-4. [Evaluation: How to evaluate the training](#evaluation)
+1. [Ntuples: How to produce training samples](#produce-ntuples)
+2. [Training: How to run the training on GPU](#training)
+3. [Evaluation: How to evaluate the training](#evaluation)
 
-# Getting started
+# Produce ntuples
+
+$# Getting started
 
 The code was develop in `CMSSW_13_1_0_pre1` but newer releases should also work
 
@@ -24,8 +25,6 @@ cmsenv
 git clone git@github.com:alintulu/Run3ScoutingJetTagging.git
 scram b -j 8
 ```
-
-# Produce ntuples
 
 ## AK4 producer
 
