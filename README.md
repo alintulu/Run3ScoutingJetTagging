@@ -13,6 +13,7 @@
         - [How are the labels for mass regression derived?](#ak8-derivation-of-labels-for-mass-regression)
 3. [Training: How to run the training on GPU](#training)
 4. [Evaluation: How to evaluate the training](#evaluation)
+5. [Calibration: How to calibrate the result](#calibration)
 
 # Produce ntuples
 
@@ -199,3 +200,7 @@ The training is performed by running the `train.sh` file. Set the desired batch 
 The output folder stores the trained PyTorch models after every epoch, as well as the log file that records the loss and accuracy in the runtime. The predict step also produces a predicted root file in the output folder, including the truth label, the predicted store, and several observer variables we provided in the data configuration file. With the predicted root file, you can evaluate the performance of your training. 
 
 The [Evaluation](Evaluation) folder contains notebooks to create a ROC curves for AK4 and AK8 flavour tagging as well several plots to determine the performance of the mass regression.
+
+# Calibration
+
+At the moment the only example stored in this directory is how to calibrate the mass regression. It can be found in the [Calibration/AK8/massreg](Calibration/AK8/massreg) folder.
