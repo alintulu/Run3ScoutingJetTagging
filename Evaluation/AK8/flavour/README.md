@@ -8,7 +8,7 @@
 
 ## ROC curve
 
-The ROC curve serves as a crucial tool in evaluating the performance of a neural network designed to classify particle interactions. In the specific context of discriminating between Higgs to bb decays and QCD events, the ROC curve visually represents the trade-off between the ratio of signal events correctly classified as signal (signal efficiency or true positive rate) and the background events wrongly classified as signal (background efficiency or false positive rate). The area under the ROC curve (AUC) quantifies the overall performance, with a higher AUC indicating better classifier performance.
+The ROC curve serves as a crucial tool in evaluating the performance of a neural network designed to classify particle interactions. In the specific context of discriminating between Higgs to bb and QCD events, the ROC curve visually represents the trade-off between the ratio of signal events correctly classified as signal (signal efficiency or true positive rate) and the background events wrongly classified as signal (background efficiency or false positive rate). The area under the ROC curve (AUC) quantifies the overall performance, with a higher AUC indicating better classifier performance.
 
 Selecting appropriate working points (WP) for a Higgs to bb versus QCD classifier involves choosing specific discrimination thresholds that align with desired signal efficiencies. Commonly used WP include 40%, 60%, and 80% signal efficiency. These points represent different trade-offs between maximising signal identification and minimising false positives, allowing tailoring the classifier's performance based on the analysis' objectives.
 
@@ -26,7 +26,7 @@ The code to produce the following distribution can be found in [flavour.ipynb](f
 
 ## Signal efficiency
 
-It may be helpful to plot the signal efficiency as a function of different kinematic variables in order to identify potential discrepancies. This allows for a comprehensive exploration of the classifier's performance across various aspects of particle decays. The code to produce the signal efficiency as a function of momentum and softdrop mass can be found in [flavour_and_massreg.ipynb](flavour_and_massreg.ipynb).
+It may be helpful to plot the signal efficiency as a function of different kinematic variables in order to identify potential discrepancies. This allows for a comprehensive exploration of the classifier's performance across various event characteristics. The code to produce the signal efficiency as a function of momentum and softdrop mass can be found in [flavour_and_massreg.ipynb](flavour_and_massreg.ipynb).
 
 <img src='figures/SignalEff_vs_mSD.png' width='500'>
 
