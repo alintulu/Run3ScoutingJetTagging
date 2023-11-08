@@ -1,12 +1,22 @@
 # Contents of this repository
 
 1. [Ntuples: How to produce training samples](#produce-ntuples)
-2. [Training: How to run the training on GPU](#training)
-3. [Evaluation: How to evaluate the training](#evaluation)
+   - [Getting started](#getting-started)
+   - [AK4 producer](#ak4-producer)
+        - [Which are the input samples?](#ak4-input-samples)
+        - [How does one produce a ntuple?](#ak4-example)
+        - [How are the labels derived?](#ak4-derivation-of-labels)
+   - [AK8 producer](#ak8-producer)
+        - [Which are the input samples?](#ak8-input-samples)
+        - [How does one produce a ntuple?](#ak8-example)
+        - [How are the labels for flavour tagging derived?](#ak8-derivation-of-labels-for-flavour-tagging)
+        - [How are the labels for mass regression derived?](#ak8-derivation-of-labels-for-mass-regression)
+3. [Training: How to run the training on GPU](#training)
+4. [Evaluation: How to evaluate the training](#evaluation)
 
 # Produce ntuples
 
-$# Getting started
+## Getting started
 
 The code was develop in `CMSSW_13_1_0_pre1` but newer releases should also work
 
@@ -37,7 +47,7 @@ The AK4 producer creates ntuples which can be used for
 - uds tagging
 - g tagging
 
-### Input samples
+### AK4 input samples 
 
 AK4 flavour tagging is usually trained on three types of input samples:
 
@@ -54,7 +64,7 @@ Here the generated mass of the BulkGraviton is 960 GeV, while the generated mass
 2. QCD
 3. TTbar
 
-### Example
+### AK4 example
 
 To create an example ntuple from a QCD datasets, make sure you have a valid grid proxy and
 
@@ -68,7 +78,7 @@ cmsRun Run3ScoutingJetTagging/Analysis/test/AK4FromNanoAOD.py inputDataset="/QCD
 cmsRun Run3ScoutingJetTagging/Analysis/test/AK4.py inputDataset="/QCD_"
 ```
 
-### Derivation of labels
+### AK4 derivation of labels
 
 For training, the labels (jet flavour) are assigned by the usage of 4 jet characteristics:
 - `j_nCHadrons`: the number of c hadrons in the jet
@@ -100,7 +110,7 @@ The AK8 producer creates ntuples which can be used for
 - Higgs to tautau vs QCD tagging
 - Mass regression
 
-### Input samples
+### AK8 input samples
 
 AK8 flavour tagging and mass regression is usually trained on two types of input samples:
 
@@ -116,7 +126,7 @@ Here the generated mass of the BulkGraviton is 960 GeV, while the generated mass
 
 2. QCD
 
-### Examples
+### AK8 Example
 
 To create an example ntuple from a QCD datasets, make sure you have a valid grid proxy and
 
@@ -130,7 +140,7 @@ cmsRun Run3ScoutingJetTagging/Analysis/test/AK8FromNanoAOD.py inputDataset="/QCD
 cmsRun Run3ScoutingJetTagging/Analysis/test/AK8.py inputDataset="/QCD_"
 ```
 
-### Derivation of labels for flavour tagging
+### AK8 derivation of labels for flavour tagging
 
 For training, the labels (jet flavour) are defined as:
 - `label_H_bb`: the jet was created from a Higgs boson decaying to two b quarks
@@ -144,7 +154,7 @@ The jet labels are assigned to each scouting jet as follows:
 2. Find the final state daughters of the Higgs boson, require dR(jet, daughter) < 0.8 and tag the jet as `label_H_bb` if they are both b quarks etc
 3. Tag the jet as QCD if final state daughters don't match to the jet
 
-### Derivation of labels for mass regression
+### AK8 derivation of labels for mass regression
 
 For training, the labels (jet mass) are defined as:
 - `fj_gen_mass`: the generated mass of the GEN particle which the scouting jet originates from
