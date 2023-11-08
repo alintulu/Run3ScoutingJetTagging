@@ -4,3 +4,12 @@ Jobs/
 Jobs_old/
 files/
 sub_0.sh
+
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# IPython
+profile_default/
+ipython_config.py
+
+*/**/outfiles
