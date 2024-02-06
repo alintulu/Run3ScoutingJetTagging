@@ -8,7 +8,7 @@
  *      Authot: Adelina Lintuluoto
  */
 
-#include "Run3ScoutingAnalysisTools/Analysis/interface/FatJetMatching.h"
+#include "Run3ScoutingJetTagging/Analysis/interface/FatJetMatching.h"
 
 #include <unordered_set>
 #include "TString.h"

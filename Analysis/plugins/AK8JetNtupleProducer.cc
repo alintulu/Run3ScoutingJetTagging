@@ -42,7 +42,7 @@
 
 #include "SimGeneral/HepPDTRecord/interface/ParticleDataTable.h"
 
-#include "Run3ScoutingAnalysisTools/Analysis/interface/FatJetMatching.h"
+#include "Run3ScoutingJetTagging/Analysis/interface/FatJetMatching.h"
 
 using namespace deepntuples;
 

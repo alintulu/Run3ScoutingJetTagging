@@ -13,6 +13,6 @@
 <use name="fastjet"/>
 <use name="fastjet-contrib"/>
 <use name="root"/>
-<use name="Run3ScoutingAnalysisTools/Analysis"/>
+<use name="Run3ScoutingJetTagging/Analysis"/>
 <use name="SimGeneral/HepPDTRecord"/>
 <flags EDM_PLUGIN="1"/>

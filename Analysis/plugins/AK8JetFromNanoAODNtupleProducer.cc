@@ -23,7 +23,7 @@
 #include "DataFormats/JetReco/interface/GenJetCollection.h"
 #include "DataFormats/Math/interface/libminifloat.h"
 
-#include "Run3ScoutingAnalysisTools/Analysis/interface/FatJetMatching.h"
+#include "Run3ScoutingJetTagging/Analysis/interface/FatJetMatching.h"
 
 using namespace deepntuples;
 
