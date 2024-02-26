@@ -11,15 +11,16 @@
         - [How does one produce a ntuple?](#ak8-example)
         - [How are the labels for flavour tagging derived?](#ak8-derivation-of-labels-for-flavour-tagging)
         - [How are the labels for mass regression derived?](#ak8-derivation-of-labels-for-mass-regression)
-3. [Training: How to run the training on GPU](#training)
-4. [Evaluation: How to evaluate the training](#evaluation)
-5. [Calibration: How to calibrate the result](#calibration)
+2. [Training: How to run the training on GPU](#training)
+   - [Problems with the training](#problems)
+3. [Evaluation: How to evaluate the training](#evaluation)
+4. [Calibration: How to calibrate the result](#calibration)
 
 # Produce ntuples
 
 ## Getting started
 
-The code was develop in `CMSSW_13_1_0_pre1` but newer releases should also work
+The code was develop in `CMSSW_13_1_0_pre1`. While newer releases should also work, the have not been tested.
 
 1. Log into lxplus
 2. Prepare the CMSSW release
@@ -49,6 +50,8 @@ The AK4 producer creates ntuples which can be used for
 - g tagging
 
 ### AK4 input samples 
+
+**Please note**, before the Run3Winter24 MC campaign the Run 3 scouting collections only existed as AODSIM. However, the ntupiliser requires GEN information which is only available as MINIAODSIM. As a result, when using samples preceeding the Run3Winter24 MC campaigns  one needs to provide both the AODSIM and MINIAODSIM samples (see [here](https://github.com/alintulu/Run3ScoutingJetTagging/blob/main/Analysis/test/AK4.py#L24-L30) for an example). In contrast, for samples produces with the Run3Winter24 MC campaign or a later campaign only requires the MINIADOSIM sample.
 
 AK4 flavour tagging is usually trained on three types of input samples:
 
@@ -112,6 +115,8 @@ The AK8 producer creates ntuples which can be used for
 - Mass regression
 
 ### AK8 input samples
+
+**Please note**, before the Run3Winter24 MC campaign the Run 3 scouting collections only existed as AODSIM. However, the ntupiliser requires GEN information which is only available as MINIAODSIM. As a result, when using samples preceeding the Run3Winter24 MC campaigns  one needs to provide both the AODSIM and MINIAODSIM samples (see [here](https://github.com/alintulu/Run3ScoutingJetTagging/blob/main/Analysis/test/AK4.py#L24-L30) for an example). In contrast, for samples produces with the Run3Winter24 MC campaign or a later campaign only requires the MINIADOSIM sample.
 
 AK8 flavour tagging and mass regression is usually trained on two types of input samples:
 
@@ -195,12 +200,16 @@ While for mass regression, [the soft-max unit is removed](https://github.com/ali
 
 The training is performed by running the `train.sh` file. Set the desired batch size, number of epochs etc before starting the training.
 
+## Problems
+
+If you're training fails unexpectedly without an obvious cause, it may be because your input samples have too few events. This can be fixed by e.g. adjusting the batchsize, however, in our case simply merging the input samples helped.
+
 # Evaluation
 
 The output folder stores the trained PyTorch models after every epoch, as well as the log file that records the loss and accuracy in the runtime. The predict step also produces a predicted root file in the output folder, including the truth label, the predicted store, and several observer variables we provided in the data configuration file. With the predicted root file, you can evaluate the performance of your training. 
 
-The [Evaluation](Evaluation) folder contains notebooks to create a ROC curves for AK4 and AK8 flavour tagging as well several plots to determine the performance of the mass regression.
+The [Evaluation](Evaluation) folder contains some notebooks that may be helpful when creating ROC curves for AK4 and AK8 flavour tagging as well plots to determine the performance of the training. **Please note**, the scripts are not complete but are added to this repository as they may provide a good starting point.
 
 # Calibration
 
-At the moment the only example stored in this directory is how to calibrate the mass regression. It can be found in the [Calibration/AK8/massreg](Calibration/AK8/massreg) folder.
+It is required to calibrate both the flavour tagging and mass regerssion algorithms. At the moment no complete example are stored in this repository. However, as starting point based on Section 4.2.2 of [AN-2021/004](Section 4.2.2 of AN-2021/004) of how to calibrate the mass regression can be found in the [Calibration/AK8/massreg](Calibration/AK8/massreg) folder.
