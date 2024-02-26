@@ -212,4 +212,4 @@ The [Evaluation](Evaluation) folder contains some notebooks that may be helpful 
 
 # Calibration
 
-It is required to calibrate both the flavour tagging and mass regerssion algorithms. At the moment no complete example are stored in this repository. However, as starting point based on Section 4.2.2 of [AN-2021/004](Section 4.2.2 of AN-2021/004) of how to calibrate the mass regression can be found in the [Calibration/AK8/massreg](Calibration/AK8/massreg) folder.
+It is required to calibrate both the flavour tagging and mass regerssion algorithms. At the moment no complete example are stored in this repository. However, as starting point based on Section 4.2.2 of [AN-2021/004](https://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2021/004) of how to calibrate the mass regression can be found in the [Calibration/AK8/massreg](Calibration/AK8/massreg) folder.
