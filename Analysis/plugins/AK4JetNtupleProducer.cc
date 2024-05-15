@@ -202,7 +202,7 @@ void AK4JetNtupleProducer::analyze(const edm::Event& iEvent, const edm::EventSet
   fastjet::AreaDefinition area_def(fastjet::active_area, area_spec);
 
   fastjet::ClusterSequenceArea ak4_cs(j_part, ak4_def, area_def);
-  std::vector<fastjet::PseudoJet> ak4_jets = fastjet::sorted_by_pt(ak4_cs.inclusive_jets(170.0));
+  std::vector<fastjet::PseudoJet> ak4_jets = fastjet::sorted_by_pt(ak4_cs.inclusive_jets(15.0));
 
   // Match jet-gen jet
   std::map<int, reco::JetFlavourInfo> genmatch_resultmap;
